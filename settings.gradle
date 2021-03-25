@@ -1,0 +1,5 @@
+include ':androidapi'
+include ':javaapi'
+include ':tvshowlist'
+include ':app'
+rootProject.name = "Television"

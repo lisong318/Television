@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--深原色-->
+    <color name="dark_primary_colo">#303F9F</color>
+    <!--浅原色-->
+    <color name="light_primary_color">#C5CAE9</color>
+    <!--原色-->
+    <color name="primary_color">#3F51B5</color>
+    <!--文本图标-->
+    <color name="text_icons">#FFFFFF</color>
+    <!--强调颜色-->
+    <color name="accent_color">#536DFE</color>
+    <!--主要文本-->
+    <color name="primary_text">#212121</color>
+    <!--次要文本-->
+    <color name="secondary_text">#757575</color>
+    <!--分割线-->
+    <color name="divider_color">#BDBDBD</color>
+</resources>

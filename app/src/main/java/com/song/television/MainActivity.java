@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TVShowListView tvShowListView = findViewById(R.id.tVShowListView);
-        tvShowListView.getTvShowManager().setTvShowArrayList(initTVShowData(50));
+        tvShowListView.getTvShowManager().setTvShowArrayList(initTVShowData(300));
     }
 
     public ArrayList<TVShow> initTVShowData(int num) {

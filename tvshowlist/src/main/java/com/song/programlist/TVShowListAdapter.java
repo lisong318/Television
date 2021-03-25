@@ -21,7 +21,8 @@ public class TVShowListAdapter extends RecyclerView.Adapter<TVShowListViewHolder
     @Override
     public TVShowListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //待完成
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(0, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.tvshow_item, parent, false);
+        itemView.setFocusable(true);
         return new TVShowListViewHolder(itemView);
     }
 
@@ -29,7 +30,7 @@ public class TVShowListAdapter extends RecyclerView.Adapter<TVShowListViewHolder
     public void onBindViewHolder(@NonNull TVShowListViewHolder holder, int position) {
         View itemView = holder.itemView;
         TextView nameTextView = holder.getNameTextView();
-        nameTextView.setText(getTvShowManager().getTvShowArrayList().get(position).getName());
+        nameTextView.setText(tvShowManager.getTvShowArrayList().get(position).getName());
         //待完成
         itemView.setOnClickListener(null);
         //待完成

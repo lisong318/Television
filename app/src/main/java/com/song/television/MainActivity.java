@@ -1,10 +1,12 @@
 package com.song.television;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.song.api.TVShow;
+import com.song.programlist.ArrayTVShowAdapter;
 import com.song.programlist.TVShowListView;
 
 import java.net.URI;
@@ -12,13 +14,21 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TVShowListView tvShowListView = findViewById(R.id.tVShowListView);
-        tvShowListView.getTvShowManager().setTvShowArrayList(initTVShowData(300));
+        ArrayTVShowAdapter arrayTVShowAdapter = tvShowListView.getArrayTVShowAdapter();
+        arrayTVShowAdapter.addAll(initTVShowData(300));
+        tvShowListView.setTvShowListViewListener(new TVShowListView.TVShowListViewListener() {
+            @Override
+            public boolean preparePlay(TVShow tvShow) {
+                Log.d(TAG, "preparePlay: "+tvShow.getName());
+                return true;
+            }
+        });
     }
 
     public ArrayList<TVShow> initTVShowData(int num) {

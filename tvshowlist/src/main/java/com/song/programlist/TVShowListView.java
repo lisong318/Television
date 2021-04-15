@@ -1,23 +1,23 @@
 package com.song.programlist;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.leanback.widget.FocusHighlight;
+import androidx.leanback.widget.FocusHighlightHelper;
+import androidx.leanback.widget.VerticalGridView;
 
-import com.song.api.TVShowManager;
+import com.song.api.TVShow;
 
-public class TVShowListView extends RecyclerView {
-    private static final String TAG = TVShowListView.class.getSimpleName();
-    private int spanCount = 8;
-    private TVShowListGridLayoutManager tvShowListGridLayoutManager;
-    private TVShowListAdapter tvShowListAdapter;
-    private TVShowManager tvShowManager;
+public class TVShowListView extends VerticalGridView {
+    private static final String TAG = "TVShowListView";
+    private int numCount = 8;
+
+    private TVShowVerticalGridItemBridgeAdapter tvShowVerticalGridItemBridgeAdapter;
+    private ArrayTVShowAdapter arrayTVShowAdapter;
+    private TVShowListViewListener tvShowListViewListener;
 
     public TVShowListView(@NonNull Context context) {
         this(context, null);
@@ -29,40 +29,43 @@ public class TVShowListView extends RecyclerView {
 
     public TVShowListView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init();
     }
 
     /**
      * 初始化
      */
-    int margin = 30;
-    private void init(Context context) {
-        tvShowListGridLayoutManager = new TVShowListGridLayoutManager(context, spanCount);
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
-        tvShowManager = new TVShowManager();
-        tvShowListAdapter = new TVShowListAdapter(tvShowManager);
-        setLayoutManager(tvShowListGridLayoutManager);
-        setAdapter(tvShowListAdapter);
-
-        ItemDecoration itemDecoration = new ItemDecoration() {
+    private void init() {
+        setNumColumns(numCount);
+        TVShowPresenter tvShowPresenter = new TVShowPresenter();
+        arrayTVShowAdapter = new ArrayTVShowAdapter(tvShowPresenter);
+        tvShowVerticalGridItemBridgeAdapter = new TVShowVerticalGridItemBridgeAdapter(arrayTVShowAdapter);
+        setAdapter(tvShowVerticalGridItemBridgeAdapter);
+        FocusHighlightHelper.setupBrowseItemFocusHighlight(tvShowVerticalGridItemBridgeAdapter, FocusHighlight.ZOOM_FACTOR_LARGE, false);
+        tvShowVerticalGridItemBridgeAdapter.setTvShowVerticalGridItemBridgeAdapterListener(new TVShowVerticalGridItemBridgeAdapter.TVShowVerticalGridItemBridgeAdapterListener() {
             @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull State state) {
-
-                if (parent.getChildAdapterPosition(view) %spanCount == 0) {
-                    outRect.left = 0; //第一列左边贴边
-                } else {
-                    if (parent.getChildAdapterPosition(view) %spanCount == 1) {
-                        outRect.left = margin;//第二列移动一个位移间距
-                    } else {
-                        outRect.left = margin * 2;//由于第二列已经移动了一个间距，所以第三列要移动两个位移间距就能右边贴边，且item间距相等
+            public boolean OnClick(int position) {
+                if (tvShowListViewListener != null) {
+                    TVShow tvShow = (TVShow) arrayTVShowAdapter.get(position);
+                    if (!tvShowListViewListener.preparePlay(tvShow)) {
+                        return false;
                     }
+                    return true;
                 }
+                return false;
             }
-        };
-        addItemDecoration(itemDecoration);
+        });
     }
 
-    public TVShowManager getTvShowManager() {
-        return tvShowManager;
+    public ArrayTVShowAdapter getArrayTVShowAdapter() {
+        return arrayTVShowAdapter;
+    }
+
+    public interface TVShowListViewListener {
+        boolean preparePlay(TVShow tvShow);
+    }
+
+    public void setTvShowListViewListener(TVShowListViewListener tvShowListViewListener) {
+        this.tvShowListViewListener = tvShowListViewListener;
     }
 }

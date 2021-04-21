@@ -11,11 +11,13 @@ import androidx.leanback.widget.VerticalGridView;
 
 import com.song.api.TVShow;
 
+import java.util.ArrayList;
+
 public class TVShowListView extends VerticalGridView {
     private static final String TAG = "TVShowListView";
     private int numCount = 8;
 
-    private TVShowVerticalGridItemBridgeAdapter tvShowVerticalGridItemBridgeAdapter;
+    private TVShowItemBridgeAdapter tvShowItemBridgeAdapter;
     private ArrayTVShowAdapter arrayTVShowAdapter;
     private TVShowListViewListener tvShowListViewListener;
 
@@ -39,15 +41,15 @@ public class TVShowListView extends VerticalGridView {
         setNumColumns(numCount);
         TVShowPresenter tvShowPresenter = new TVShowPresenter();
         arrayTVShowAdapter = new ArrayTVShowAdapter(tvShowPresenter);
-        tvShowVerticalGridItemBridgeAdapter = new TVShowVerticalGridItemBridgeAdapter(arrayTVShowAdapter);
-        setAdapter(tvShowVerticalGridItemBridgeAdapter);
-        FocusHighlightHelper.setupBrowseItemFocusHighlight(tvShowVerticalGridItemBridgeAdapter, FocusHighlight.ZOOM_FACTOR_LARGE, false);
-        tvShowVerticalGridItemBridgeAdapter.setTvShowVerticalGridItemBridgeAdapterListener(new TVShowVerticalGridItemBridgeAdapter.TVShowVerticalGridItemBridgeAdapterListener() {
+        tvShowItemBridgeAdapter = new TVShowItemBridgeAdapter(arrayTVShowAdapter);
+        setAdapter(tvShowItemBridgeAdapter);
+        FocusHighlightHelper.setupBrowseItemFocusHighlight(tvShowItemBridgeAdapter, FocusHighlight.ZOOM_FACTOR_LARGE, false);
+        tvShowItemBridgeAdapter.setTvShowItemBridgeAdapterListener(new TVShowItemBridgeAdapter.TVShowItemBridgeAdapterListener() {
             @Override
-            public boolean OnClick(int position) {
+            public boolean onClick(int position) {
                 if (tvShowListViewListener != null) {
                     TVShow tvShow = (TVShow) arrayTVShowAdapter.get(position);
-                    if (!tvShowListViewListener.preparePlay(tvShow)) {
+                    if (!tvShowListViewListener.onClickByItem(tvShow)) {
                         return false;
                     }
                     return true;
@@ -57,15 +59,20 @@ public class TVShowListView extends VerticalGridView {
         });
     }
 
-    public ArrayTVShowAdapter getArrayTVShowAdapter() {
-        return arrayTVShowAdapter;
-    }
-
     public interface TVShowListViewListener {
-        boolean preparePlay(TVShow tvShow);
+        boolean onClickByItem(TVShow tvShow);
     }
 
     public void setTvShowListViewListener(TVShowListViewListener tvShowListViewListener) {
         this.tvShowListViewListener = tvShowListViewListener;
+    }
+
+    public void add(TVShow tvShow) {
+        arrayTVShowAdapter.add(tvShow);
+    }
+    public void addAll(ArrayList<TVShow> tvShowArrayList){
+        for (TVShow tvShow : tvShowArrayList) {
+            add(tvShow);
+        }
     }
 }

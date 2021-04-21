@@ -6,12 +6,12 @@ import android.view.ViewGroup;
 import androidx.leanback.widget.ItemBridgeAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 
-public class TVShowVerticalGridItemBridgeAdapter extends ItemBridgeAdapter {
-    public TVShowVerticalGridItemBridgeAdapter(ObjectAdapter adapter) {
+public class TVShowItemBridgeAdapter extends ItemBridgeAdapter {
+    public TVShowItemBridgeAdapter(ObjectAdapter adapter) {
         super(adapter);
     }
 
-    private TVShowVerticalGridItemBridgeAdapterListener tvShowVerticalGridItemBridgeAdapterListener;
+    private TVShowItemBridgeAdapterListener tvShowItemBridgeAdapterListener;
     private int playPosition = 0;
 
     @Override
@@ -23,8 +23,8 @@ public class TVShowVerticalGridItemBridgeAdapter extends ItemBridgeAdapter {
                 if (playPosition == viewHolder.getAdapterPosition()) {
                     return;
                 }
-                if (tvShowVerticalGridItemBridgeAdapterListener != null) {
-                    if (!tvShowVerticalGridItemBridgeAdapterListener.OnClick(viewHolder.getAdapterPosition())) {
+                if (tvShowItemBridgeAdapterListener != null) {
+                    if (!tvShowItemBridgeAdapterListener.onClick(viewHolder.getAdapterPosition())) {
                         return;
                     }
                 }
@@ -48,11 +48,11 @@ public class TVShowVerticalGridItemBridgeAdapter extends ItemBridgeAdapter {
         }
     }
 
-    public interface TVShowVerticalGridItemBridgeAdapterListener {
-        boolean OnClick(int position);
+    public interface TVShowItemBridgeAdapterListener {
+        boolean onClick(int position);
     }
 
-    public void setTvShowVerticalGridItemBridgeAdapterListener(TVShowVerticalGridItemBridgeAdapterListener tvShowVerticalGridItemBridgeAdapterListener) {
-        this.tvShowVerticalGridItemBridgeAdapterListener = tvShowVerticalGridItemBridgeAdapterListener;
+    public void setTvShowItemBridgeAdapterListener(TVShowItemBridgeAdapterListener tvShowItemBridgeAdapterListener) {
+        this.tvShowItemBridgeAdapterListener = tvShowItemBridgeAdapterListener;
     }
 }
